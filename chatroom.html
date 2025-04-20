@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Chat Room</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+</head>
+<body>
+  <h2>Chat with <span id="chatWith"></span></h2>
+
+  <div id="messages" style="border: 1px solid #ccc; height: 300px; overflow-y: auto;"></div>
+  
+  <input type="text" id="message" placeholder="Type your message">
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    const chatWith = localStorage.getItem('chatWith');
+    document.getElementById('chatWith').textContent = chatWith;
+
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('message');
+    
+    const userName = localStorage.getItem('name') || 'Anonymous';
+    const chatRoom = `chat_${chatWith.replace(/\s/g, '_')}`;
+
+    const chatRef = firebase.database().ref('chats/' + chatRoom);
+
+    chatRef.on('child_added', (snapshot) => {
+      const msg = snapshot.val();
+      const msgEl = document.createElement('p');
+      msgEl.textContent = `${msg.sender}: ${msg.text}`;
+      messagesDiv.appendChild(msgEl);
+    });
+
+    function sendMessage() {
+      const text = messageInput.value;
+      if (!text) return;
+
+      chatRef.push({
+        sender: userName,
+        text: text,
+        timestamp: Date.now()
+      });
+
+      messageInput.value = '';
+    }
+  </script>
+</body>
+</html>

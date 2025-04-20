@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Find Teams</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+</head>
+<body>
+  <h2>Student Professionals</h2>
+  <div id="team-list">
+    <div class="user-card">
+      <p><strong>Sahil Verma</strong> - Frontend Dev</p>
+      <button onclick="openChat('Sahil Verma')">Chat</button>
+    </div>
+    <div class="user-card">
+      <p><strong>Priyanshi</strong> - ML Engineer</p>
+      <button onclick="openChat('Priyanshi')">Chat</button>
+    </div>
+  </div>
+
+  <script>
+    function openChat(user) {
+      localStorage.setItem('chatWith', user);
+      window.location.href = 'chatroom.html';
+    }
+  </script>
+</body>
+</html>
